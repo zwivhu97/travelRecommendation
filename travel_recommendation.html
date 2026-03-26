@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Travel Explorer</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: #333;
+      color: white;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    nav a {
+      color: white;
+      margin-right: 15px;
+      text-decoration: none;
+    }
+
+    .search-box input {
+      padding: 5px;
+    }
+
+    .search-box button {
+      padding: 5px 10px;
+      margin-left: 5px;
+    }
+
+    /* HERO SECTION */
+    .hero {
+  background: url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Taj_Mahal_in_March_2004.jpg') no-repeat center/cover;
+  height: 90vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+    .hero h1 {
+      font-size: 50px;
+    }
+
+    .hero button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background: orange;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* RESULTS GRID */
+    #results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div>
+    <a href="#">Home</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search destinations...">
+    <button onclick="search()">Search</button>
+    <button onclick="clearResults()">Reset</button>
+  </div>
+</nav>
+
+<!-- HOME SECTION -->
+<section class="hero">
+  <h1>Explore the World</h1>
+  <p>Discover cultures, beaches, temples, and more.</p>
+  <button>Book Now</button>
+</section>
+
+<!-- RESULTS -->
+<div id="results"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
