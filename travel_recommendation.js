@@ -1,64 +1,66 @@
-let data;
+const resultsContainer = document.getElementById("results");
 
-// Fetch JSON data
-fetch('travel_recommendation_api.json')
+// Fetch the JSON data once
+let travelData = {};
+fetch("travel_recommendation_api.json")
   .then(response => response.json())
-  .then(json => {
-    data = json;
-    console.log(data); // Confirm data is loaded
+  .then(data => {
+    travelData = data;
+    console.log("Data loaded:", travelData);
   })
-  .catch(err => console.error("Error loading JSON:", err));
+  .catch(err => console.error(err));
 
-// Search function
 function search() {
-  const input = document.getElementById('searchInput').value.toLowerCase();
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = '';
+  const keyword = document.getElementById("searchInput").value.toLowerCase();
+  resultsContainer.innerHTML = ""; // clear previous results
 
-  // Search beaches
-  const beachResults = data.beaches.filter(b => b.name.toLowerCase().includes(input));
-  beachResults.forEach(item => resultsDiv.appendChild(createCard(item)));
+  if (!keyword) return;
 
-  // Search temples
-  const templeResults = data.temples.filter(t => t.name.toLowerCase().includes(input));
-  templeResults.forEach(item => resultsDiv.appendChild(createCard(item)));
+  // BEACHES
+  if (keyword.includes("beach")) {
+    travelData.beaches.forEach(place => {
+      resultsContainer.innerHTML += createCard(place.name, place.imageUrl, place.description);
+    });
+  }
 
-  // Search countries and cities
-  data.countries.forEach(country => {
-    if (country.name.toLowerCase().includes(input)) {
-      country.cities.forEach(city => resultsDiv.appendChild(createCard(city)));
-    } else {
+  // TEMPLES
+  if (keyword.includes("temple")) {
+    travelData.temples.forEach(place => {
+      resultsContainer.innerHTML += createCard(place.name, place.imageUrl, place.description);
+    });
+  }
+
+  // COUNTRIES
+  if (keyword.includes("country")) {
+    travelData.countries.forEach(country => {
       country.cities.forEach(city => {
-        if (city.name.toLowerCase().includes(input)) {
-          resultsDiv.appendChild(createCard(city));
-        }
+        resultsContainer.innerHTML += createCard(city.name, city.imageUrl, city.description);
+      });
+    });
+  }
+
+  // Optional: if keyword matches a country name directly
+  travelData.countries.forEach(country => {
+    if (country.name.toLowerCase().includes(keyword)) {
+      country.cities.forEach(city => {
+        resultsContainer.innerHTML += createCard(city.name, city.imageUrl, city.description);
       });
     }
   });
 }
 
-// Clear results
 function clearResults() {
-  document.getElementById('results').innerHTML = '';
-  document.getElementById('searchInput').value = '';
+  resultsContainer.innerHTML = "";
+  document.getElementById("searchInput").value = "";
 }
 
-// Create a card element
-function createCard(item) {
-  const div = document.createElement('div');
-  div.className = 'card';
-
-  const img = document.createElement('img');
-  img.src = item.imageUrl;
-  div.appendChild(img);
-
-  const name = document.createElement('h3');
-  name.textContent = item.name;
-  div.appendChild(name);
-
-  const desc = document.createElement('p');
-  desc.textContent = item.description;
-  div.appendChild(desc);
-
-  return div;
+// Helper function to create HTML for a result card
+function createCard(name, imageUrl, description) {
+  return `
+    <div class="card">
+      <img src="${imageUrl}" alt="${name}">
+      <h3>${name}</h3>
+      <p>${description}</p>
+    </div>
+  `;
 }
